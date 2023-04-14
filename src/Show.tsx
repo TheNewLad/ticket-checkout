@@ -7,17 +7,12 @@ import {
 } from "@mui/material";
 import React from "react";
 import { ShowType } from "./shows";
-import { getPictureUrl } from "./util";
+import { formatCurrency, getPictureUrl } from "./util";
 
 interface Props extends ShowType {
   selected: boolean;
   handleSelect: (id: ShowType["id"]) => void;
 }
-
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
 
 export const Show = ({
   id,
@@ -53,7 +48,7 @@ export const Show = ({
         </CardContent>
         <CardContent>
           <Typography variant="h6" color="textPrimary" component="p">
-            {`${currencyFormatter.format(price)}`}
+            {formatCurrency(price)}
           </Typography>
         </CardContent>
       </CardActionArea>
