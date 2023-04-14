@@ -5,10 +5,11 @@ import Box from "@mui/material/Box";
 import { Stepper, Step, StepLabel, Button } from "@mui/material";
 import { ShowSelector } from "./ShowSelector";
 import { ShowType } from "./shows";
+import { PurchaseTickets } from "./PurchaseTickets";
 
 export default function App() {
   const [activeStep, setActiveStep] = useState(0);
-  const [selectedShow, setSelectedShow] = useState<ShowType["id"]>(-1);
+  const [selectedShowId, setSelectedShowId] = useState<ShowType["id"]>(-1);
 
   const steps = ["Select A Show", "Purchase Tickets", "Checkout", "Enjoy"];
 
@@ -17,12 +18,12 @@ export default function App() {
       case 0:
         return (
           <ShowSelector
-            selectedShow={selectedShow}
-            setSelectedShow={setSelectedShow}
+            selectedShow={selectedShowId}
+            setSelectedShow={setSelectedShowId}
           />
         );
       case 1:
-        return "Purchase tickets";
+        return <PurchaseTickets showId={selectedShowId} />;
 
       case 2:
         return "Checkout";
@@ -81,7 +82,7 @@ export default function App() {
           <Button
             variant="contained"
             onClick={() => setActiveStep((prev) => prev + 1)}
-            disabled={activeStep === steps.length - 1 || selectedShow === -1}
+            disabled={activeStep === steps.length - 1 || selectedShowId === -1}
           >
             {activeStep === steps.length - 1 ? "Finish" : "Next"}
           </Button>
