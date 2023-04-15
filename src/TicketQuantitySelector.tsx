@@ -23,10 +23,11 @@ export const TicketQuantitySelector = ({
 }: Props) => {
   const photoWidth = 200;
   const show = findAShow(showId);
+  const step = 1;
 
   if (!show) {
     console.error(`Show with id ${showId} not found`);
-    onStepError(1);
+    onStepError(step);
     return null;
   }
 
@@ -55,7 +56,7 @@ export const TicketQuantitySelector = ({
 
   const handleError = () => {
     setError(true);
-    onStepError(1);
+    onStepError(step);
   };
 
   const handleErrorResolved = () => {

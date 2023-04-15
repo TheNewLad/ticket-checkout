@@ -3,6 +3,7 @@ import React from "react";
 import { BillingAddressForm } from "./BillingAddressForm";
 import { PaymentForm } from "./PaymentForm";
 import { TicketFees } from "./TicketFees";
+  const step = 2;
 
 export const Checkout = () => {
   return (
