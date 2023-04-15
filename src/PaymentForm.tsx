@@ -68,8 +68,8 @@ export const PaymentForm = ({ onFormError, onFormErrorResolved }: Props) => {
     event: React.ChangeEvent<HTMLInputElement>
   ) => {
     const value = event.target.value;
-    const isEmpty = value === "";
-    setCardNumberError(isEmpty);
+    const isNotSixteenDigits = !/^\d{16}$/.test(value);
+    setCardNumberError(isNotSixteenDigits || value === "");
     setCardNumber(value);
   };
 
