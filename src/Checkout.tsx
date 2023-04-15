@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { BillingAddressForm } from "./BillingAddressForm";
 import { PaymentForm } from "./PaymentForm";
 import { TicketFees } from "./TicketFees";
-import { Container } from "@mui/material";
+import { Box, Container } from "@mui/material";
 
 interface Props {
   onStepError: (step: number) => void;
@@ -25,6 +25,15 @@ export const Checkout = ({ onStepError, onStepErrorResolved }: Props) => {
     setBillingAddressFormError(false);
   };
 
+  const handlePaymentFormError = () => {
+    handleError();
+    setPaymentFormError(true);
+  };
+  const handlePaymentFormErrorResolved = () => {
+    handleErrorResolved();
+    setPaymentFormError(false);
+  };
+
   const handleError = () => {
     setError(true);
     onStepError(step);
@@ -37,11 +46,17 @@ export const Checkout = ({ onStepError, onStepErrorResolved }: Props) => {
 
   return (
     <Container maxWidth="sm">
-      <TicketFees />
-      <BillingAddressForm
-        onFormError={handleBillingAddressFormError}
-        onFormErrorResolved={handleBillingAddressFormErrorResolved}
-      />
+      <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
+        <TicketFees />
+        <BillingAddressForm
+          onFormError={handleBillingAddressFormError}
+          onFormErrorResolved={handleBillingAddressFormErrorResolved}
+        />
+        <PaymentForm
+          onFormError={handlePaymentFormError}
+          onFormErrorResolved={handlePaymentFormErrorResolved}
+        />
+      </Box>
     </Container>
   );
 };
