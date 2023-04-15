@@ -3,13 +3,21 @@ import { BillingAddressForm } from "./BillingAddressForm";
 import { PaymentForm } from "./PaymentForm";
 import { TicketFees } from "./TicketFees";
 import { Box, Container } from "@mui/material";
+import { ShowType } from "./shows";
 
 interface Props {
+  showId: ShowType["id"];
+  quantity: number;
   onStepError: (step: number) => void;
   onStepErrorResolved: () => void;
 }
 
-export const Checkout = ({ onStepError, onStepErrorResolved }: Props) => {
+export const Checkout = ({
+  showId,
+  quantity,
+  onStepError,
+  onStepErrorResolved,
+}: Props) => {
   const [billingAddressFormError, setBillingAddressFormError] = useState(true);
   const [paymentFormError, setPaymentFormError] = useState(true);
   const step = 2;
@@ -51,7 +59,7 @@ export const Checkout = ({ onStepError, onStepErrorResolved }: Props) => {
   return (
     <Container maxWidth="sm">
       <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
-        <TicketFees />
+        <TicketFees showId={showId} quantity={quantity} />
         <BillingAddressForm
           onFormError={handleBillingAddressFormError}
           onFormErrorResolved={handleBillingAddressFormErrorResolved}

@@ -11,14 +11,15 @@ import { Checkout } from "./Checkout";
 export default function App() {
   const [activeStep, setActiveStep] = useState(0);
   const [selectedShowId, setSelectedShowId] = useState<ShowType["id"]>(-1);
-  const [errorStep, setErrorStep] = useState(-1);
+  const [stepError, setStepError] = useState(-1);
+  const [quantity, setQuantity] = useState<number>(1);
 
   const handleStepError = (step: number) => {
-    setErrorStep(step);
+    setStepError(step);
   };
 
   const handleStepErrorResolved = () => {
-    setErrorStep(-1);
+    setStepError(-1);
   };
 
   const steps = [
@@ -41,6 +42,8 @@ export default function App() {
         return (
           <TicketQuantitySelector
             showId={selectedShowId}
+            quantity={quantity}
+            onQuantityChange={setQuantity}
             onStepError={handleStepError}
             onStepErrorResolved={handleStepErrorResolved}
           />
@@ -49,6 +52,8 @@ export default function App() {
       case 2:
         return (
           <Checkout
+            showId={selectedShowId}
+            quantity={quantity}
             onStepError={handleStepError}
             onStepErrorResolved={handleStepErrorResolved}
           />
@@ -63,7 +68,7 @@ export default function App() {
   const isNextDisabled = () =>
     activeStep === steps.length - 1 ||
     selectedShowId === -1 ||
-    errorStep === activeStep;
+    stepError === activeStep;
 
   return (
     <Container maxWidth="lg">

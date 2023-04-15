@@ -128,7 +128,7 @@ export const BillingAddressForm = ({
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h5" gutterBottom>
         Billing Address
       </Typography>
       <Grid container spacing={3}>

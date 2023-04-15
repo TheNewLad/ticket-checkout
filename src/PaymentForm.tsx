@@ -89,7 +89,7 @@ export const PaymentForm = ({ onFormError, onFormErrorResolved }: Props) => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h5" gutterBottom>
         Payment method
       </Typography>
       <Grid container spacing={3}>
