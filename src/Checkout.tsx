@@ -4,12 +4,16 @@ import { PaymentForm } from "./PaymentForm";
 import { TicketFees } from "./TicketFees";
 import { Box, Container } from "@mui/material";
 import { ShowType } from "./shows";
+import { ConfirmationDialog } from "./ConfirmationDialog";
 
 interface Props {
   showId: ShowType["id"];
   quantity: number;
   onStepError: (step: number) => void;
   onStepErrorResolved: () => void;
+  confirmationDialogOpen: boolean;
+  onConfirmationDialogOpen: () => void;
+  onConfirmationDialogClose: () => void;
 }
 
 export const Checkout = ({
@@ -17,6 +21,9 @@ export const Checkout = ({
   quantity,
   onStepError,
   onStepErrorResolved,
+  confirmationDialogOpen,
+  onConfirmationDialogOpen,
+  onConfirmationDialogClose,
 }: Props) => {
   const [billingAddressFormError, setBillingAddressFormError] = useState(true);
   const [paymentFormError, setPaymentFormError] = useState(true);
@@ -73,6 +80,10 @@ export const Checkout = ({
           onFormErrorResolved={handlePaymentFormErrorResolved}
         />
       </Box>
+      <ConfirmationDialog
+        open={confirmationDialogOpen}
+        onClose={onConfirmationDialogClose}
+      />
     </Container>
   );
 };

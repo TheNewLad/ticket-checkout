@@ -13,6 +13,7 @@ export default function App() {
   const [selectedShowId, setSelectedShowId] = useState<ShowType["id"]>(-1);
   const [stepError, setStepError] = useState(-1);
   const [quantity, setQuantity] = useState<number>(1);
+  const [confirmationDialogOpen, setConfirmationDialogOpen] = useState(false);
 
   const handleStepError = (step: number) => {
     setStepError(step);
@@ -22,12 +23,7 @@ export default function App() {
     setStepError(-1);
   };
 
-  const steps = [
-    "Select A Show",
-    "Select Ticket Quantity",
-    "Checkout",
-    "Enjoy",
-  ];
+  const steps = ["Select A Show", "Select Ticket Quantity", "Checkout"];
 
   const getStepContent = (step: number) => {
     switch (step) {
@@ -56,10 +52,12 @@ export default function App() {
             quantity={quantity}
             onStepError={handleStepError}
             onStepErrorResolved={handleStepErrorResolved}
+            confirmationDialogOpen={confirmationDialogOpen}
+            onConfirmationDialogOpen={() => setConfirmationDialogOpen(true)}
+            onConfirmationDialogClose={() => setConfirmationDialogOpen(false)}
           />
         );
-      case 3:
-        return "Enjoy";
+
       default:
         throw new Error("Unknown step");
     }
@@ -72,10 +70,6 @@ export default function App() {
 
   const getNextButtonText = () => {
     if (activeStep === steps.length - 1) {
-      return "Finish";
-    }
-
-    if (activeStep === steps.length - 2) {
       return "Checkout";
     }
 
@@ -127,13 +121,23 @@ export default function App() {
           >
             Previous
           </Button>
-          <Button
-            variant="contained"
-            onClick={() => setActiveStep((prev) => prev + 1)}
-            disabled={isNextDisabled()}
-          >
-            {getNextButtonText()}
-          </Button>
+          {activeStep === steps.length - 1 ? (
+            <Button
+              variant="contained"
+              onClick={() => setConfirmationDialogOpen(true)}
+              disabled={stepError === activeStep}
+            >
+              Checkout
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              onClick={() => setActiveStep((prev) => prev + 1)}
+              disabled={isNextDisabled()}
+            >
+              Next
+            </Button>
+          )}
         </Container>
         <Box sx={{ marginTop: 8, marginBottom: 3 }}>
           <Typography variant="body1">
