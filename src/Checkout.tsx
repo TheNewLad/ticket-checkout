@@ -13,7 +13,6 @@ interface Props {
 export const Checkout = ({ onStepError, onStepErrorResolved }: Props) => {
   const [billingAddressFormError, setBillingAddressFormError] = useState(true);
   const [paymentFormError, setPaymentFormError] = useState(true);
-  const [error, setError] = useState(false);
   const step = 2;
 
   const handleBillingAddressFormError = () => {
@@ -43,12 +42,10 @@ export const Checkout = ({ onStepError, onStepErrorResolved }: Props) => {
   };
 
   const handleError = () => {
-    setError(true);
     onStepError(step);
   };
 
   const handleErrorResolved = () => {
-    setError(false);
     onStepErrorResolved();
   };
 
