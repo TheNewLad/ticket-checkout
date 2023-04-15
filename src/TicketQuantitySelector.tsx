@@ -22,16 +22,9 @@ export const TicketQuantitySelector = ({
   onStepErrorResolved,
 }: Props) => {
   const photoWidth = 200;
-  const show = findAShow(showId);
   const step = 1;
 
-  if (!show) {
-    console.error(`Show with id ${showId} not found`);
-    onStepError(step);
-    return null;
-  }
-
-  const { title, date, price } = show;
+  const { title, date, price } = findAShow(showId);
   const [quantity, setQuantity] = useState<number>(1);
   const [error, setError] = useState(false);
 
