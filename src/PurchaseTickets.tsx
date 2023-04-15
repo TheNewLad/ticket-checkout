@@ -12,14 +12,21 @@ import {
 
 interface Props {
   showId: ShowType["id"];
+  onStepError: (step: number) => void;
+  onStepErrorResolved: () => void;
 }
 
-export const PurchaseTickets = ({ showId }: Props) => {
+export const PurchaseTickets = ({
+  showId,
+  onStepError,
+  onStepErrorResolved,
+}: Props) => {
   const photoWidth = 200;
   const show = findAShow(showId);
 
   if (!show) {
     console.error(`Show with id ${showId} not found`);
+    onStepError(1);
     return null;
   }
 
@@ -31,19 +38,29 @@ export const PurchaseTickets = ({ showId }: Props) => {
     const newQuantity = parseInt(event.target.value);
 
     if (event.target.value === "") {
-      setError(true);
+      handleError();
       setQuantity(newQuantity);
       return;
     }
 
     if (newQuantity < 1) {
-      setError(true);
+      handleError();
       setQuantity(newQuantity);
       return;
     }
 
-    setError(false);
+    handleErrorResolved();
     setQuantity(newQuantity);
+  };
+
+  const handleError = () => {
+    setError(true);
+    onStepError(1);
+  };
+
+  const handleErrorResolved = () => {
+    setError(false);
+    onStepErrorResolved();
   };
 
   return (
