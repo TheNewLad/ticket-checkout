@@ -93,7 +93,6 @@ export const TicketQuantitySelector = ({
             id="quantity-input"
             label="Ticket Quanity"
             type="number"
-            defaultValue={1}
             inputProps={{ min: 1 }}
             value={quantity}
             onChange={handleQuantityChange}
