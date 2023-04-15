@@ -5,14 +5,13 @@ import Box from "@mui/material/Box";
 import { Stepper, Step, StepLabel, Button } from "@mui/material";
 import { ShowSelector } from "./ShowSelector";
 import { ShowType } from "./shows";
-import { PurchaseTickets } from "./PurchaseTickets";
+import { TicketQuantitySelector } from "./TicketQuantitySelector";
 
 export default function App() {
   const [activeStep, setActiveStep] = useState(0);
   const [selectedShowId, setSelectedShowId] = useState<ShowType["id"]>(-1);
   const [errorStep, setErrorStep] = useState(-1);
 
-  const steps = ["Select A Show", "Purchase Tickets", "Checkout", "Enjoy"];
   const handleStepError = (step: number) => {
     setErrorStep(step);
   };
@@ -20,6 +19,13 @@ export default function App() {
   const handleStepErrorResolved = () => {
     setErrorStep(-1);
   };
+
+  const steps = [
+    "Select A Show",
+    "Select Ticket Quantity",
+    "Checkout",
+    "Enjoy",
+  ];
 
   const getStepContent = (step: number) => {
     switch (step) {
@@ -32,7 +38,7 @@ export default function App() {
         );
       case 1:
         return (
-          <PurchaseTickets
+          <TicketQuantitySelector
             showId={selectedShowId}
             onStepError={handleStepError}
             onStepErrorResolved={handleStepErrorResolved}

@@ -16,7 +16,7 @@ interface Props {
   onStepErrorResolved: () => void;
 }
 
-export const PurchaseTickets = ({
+export const TicketQuantitySelector = ({
   showId,
   onStepError,
   onStepErrorResolved,
