@@ -17,21 +17,29 @@ export const Checkout = ({ onStepError, onStepErrorResolved }: Props) => {
   const step = 2;
 
   const handleBillingAddressFormError = () => {
-    handleError();
+    handleFormChange();
     setBillingAddressFormError(true);
   };
   const handleBillingAddressFormErrorResolved = () => {
-    handleErrorResolved();
+    handleFormChange();
     setBillingAddressFormError(false);
   };
 
   const handlePaymentFormError = () => {
-    handleError();
+    handleFormChange();
     setPaymentFormError(true);
   };
   const handlePaymentFormErrorResolved = () => {
-    handleErrorResolved();
+    handleFormChange();
     setPaymentFormError(false);
+  };
+
+  const handleFormChange = () => {
+    if (billingAddressFormError || paymentFormError) {
+      handleError();
+    } else {
+      handleErrorResolved();
+    }
   };
 
   const handleError = () => {
