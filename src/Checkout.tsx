@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BillingAddressForm } from "./BillingAddressForm";
 import { PaymentForm } from "./PaymentForm";
 import { TicketFees } from "./TicketFees";
@@ -21,6 +21,10 @@ export const Checkout = ({
   const [billingAddressFormError, setBillingAddressFormError] = useState(true);
   const [paymentFormError, setPaymentFormError] = useState(true);
   const step = 2;
+
+  useEffect(() => {
+    handleFormChange();
+  }, [billingAddressFormError, paymentFormError]);
 
   const handleBillingAddressFormError = () => {
     handleFormChange();

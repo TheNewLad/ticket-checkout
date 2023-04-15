@@ -70,6 +70,18 @@ export default function App() {
     selectedShowId === -1 ||
     stepError === activeStep;
 
+  const getNextButtonText = () => {
+    if (activeStep === steps.length - 1) {
+      return "Finish";
+    }
+
+    if (activeStep === steps.length - 2) {
+      return "Checkout";
+    }
+
+    return "Next";
+  };
+
   return (
     <Container maxWidth="lg">
       <Box
@@ -120,7 +132,7 @@ export default function App() {
             onClick={() => setActiveStep((prev) => prev + 1)}
             disabled={isNextDisabled()}
           >
-            {activeStep === steps.length - 1 ? "Finish" : "Next"}
+            {getNextButtonText()}
           </Button>
         </Container>
         <Box sx={{ marginTop: 8, marginBottom: 3 }}>
