@@ -82,8 +82,8 @@ export const PaymentForm = ({ onFormError, onFormErrorResolved }: Props) => {
 
   const handleCvvChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    const isEmpty = value === "";
-    setCvvError(isEmpty);
+    const isNotThreeDigits = !/^\d{3}$/.test(value);
+    setCvvError(isNotThreeDigits || value === "");
     setCvv(value);
   };
 
