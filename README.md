@@ -2,6 +2,10 @@
 
 ## How to use
 
+### Netlify
+https://melodic-alfajores-05deb6.netlify.app/
+
+### Develop
 Download or clone the repo
 
 Change to the directory
