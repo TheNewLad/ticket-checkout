@@ -6,6 +6,7 @@ import { Stepper, Step, StepLabel, Button } from "@mui/material";
 import { ShowSelector } from "./ShowSelector";
 import { ShowType } from "./shows";
 import { TicketQuantitySelector } from "./TicketQuantitySelector";
+import { Checkout } from "./Checkout";
 
 export default function App() {
   const [activeStep, setActiveStep] = useState(0);
@@ -46,7 +47,7 @@ export default function App() {
         );
 
       case 2:
-        return "Checkout";
+        return <Checkout />;
       case 3:
         return "Enjoy";
       default:
