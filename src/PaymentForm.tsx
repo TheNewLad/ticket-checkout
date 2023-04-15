@@ -117,6 +117,7 @@ export const PaymentForm = ({ onFormError, onFormErrorResolved }: Props) => {
             error={cardNumberError}
             onChange={handleCardNumberChange}
             value={cardNumber}
+            helperText={cardNumberError ? "Card Number is 16 digits" : ""}
           />
         </Grid>
         <Grid xs={12} md={6}>
