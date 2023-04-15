@@ -114,8 +114,8 @@ export const BillingAddressForm = ({
 
   const handleZipChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value;
-    const isEmpty = value === "";
-    setZipError(isEmpty);
+    const isNotFiveDigits = !/^\d{5}$/.test(value);
+    setZipError(isNotFiveDigits || value === "");
     setZip(value);
   };
 
@@ -225,6 +225,7 @@ export const BillingAddressForm = ({
             error={zipError}
             onChange={handleZipChange}
             value={zip}
+            helperText={zipError ? "Zip code must be 5 digits" : ""}
           />
         </Grid>
         <Grid xs={12} sm={6}>
