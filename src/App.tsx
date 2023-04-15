@@ -47,7 +47,12 @@ export default function App() {
         );
 
       case 2:
-        return <Checkout />;
+        return (
+          <Checkout
+            onStepError={handleStepError}
+            onStepErrorResolved={handleStepErrorResolved}
+          />
+        );
       case 3:
         return "Enjoy";
       default:
