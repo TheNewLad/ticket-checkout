@@ -3,27 +3,36 @@ import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { Stepper, Step, StepLabel, Button } from "@mui/material";
-
-const steps = ["Find A Show", "Purchase Tickets", "Checkout", "Enjoy"];
-
-const getStepContent = (step: number) => {
-  switch (step) {
-    case 0:
-      return "Find A show";
-    case 1:
-      return "Purchase tickets";
-
-    case 2:
-      return "Checkout";
-    case 3:
-      return "Enjoy";
-    default:
-      throw new Error("Unknown step");
-  }
-};
+import { ShowSelector } from "./ShowSelector";
+import { ShowType } from "./shows";
 
 export default function App() {
   const [activeStep, setActiveStep] = useState(0);
+  const [selectedShow, setSelectedShow] = useState<ShowType["id"]>(-1);
+
+  const steps = ["Select A Show", "Purchase Tickets", "Checkout", "Enjoy"];
+
+  const getStepContent = (step: number) => {
+    switch (step) {
+      case 0:
+        return (
+          <ShowSelector
+            selectedShow={selectedShow}
+            setSelectedShow={setSelectedShow}
+          />
+        );
+      case 1:
+        return "Purchase tickets";
+
+      case 2:
+        return "Checkout";
+      case 3:
+        return "Enjoy";
+      default:
+        throw new Error("Unknown step");
+    }
+  };
+
   return (
     <Container maxWidth="lg">
       <Box
@@ -72,7 +81,7 @@ export default function App() {
           <Button
             variant="contained"
             onClick={() => setActiveStep((prev) => prev + 1)}
-            disabled={activeStep === steps.length - 1}
+            disabled={activeStep === steps.length - 1 || selectedShow === -1}
           >
             {activeStep === steps.length - 1 ? "Finish" : "Next"}
           </Button>
