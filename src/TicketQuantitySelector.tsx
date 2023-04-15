@@ -12,26 +12,23 @@ import {
 
 interface Props {
   showId: ShowType["id"];
+  quantity: number;
+  onQuantityChange: (quantity: number) => void;
   onStepError: (step: number) => void;
   onStepErrorResolved: () => void;
 }
 
 export const TicketQuantitySelector = ({
   showId,
+  quantity,
+  onQuantityChange,
   onStepError,
   onStepErrorResolved,
 }: Props) => {
   const photoWidth = 200;
-  const show = findAShow(showId);
+  const step = 1;
 
-  if (!show) {
-    console.error(`Show with id ${showId} not found`);
-    onStepError(1);
-    return null;
-  }
-
-  const { title, date, price } = show;
-  const [quantity, setQuantity] = useState<number>(1);
+  const { title, date, price } = findAShow(showId);
   const [error, setError] = useState(false);
 
   const handleQuantityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,23 +36,23 @@ export const TicketQuantitySelector = ({
 
     if (event.target.value === "") {
       handleError();
-      setQuantity(newQuantity);
+      onQuantityChange(newQuantity);
       return;
     }
 
     if (newQuantity < 1) {
       handleError();
-      setQuantity(newQuantity);
+      onQuantityChange(newQuantity);
       return;
     }
 
     handleErrorResolved();
-    setQuantity(newQuantity);
+    onQuantityChange(newQuantity);
   };
 
   const handleError = () => {
     setError(true);
-    onStepError(1);
+    onStepError(step);
   };
 
   const handleErrorResolved = () => {
@@ -92,7 +89,6 @@ export const TicketQuantitySelector = ({
             id="quantity-input"
             label="Ticket Quanity"
             type="number"
-            defaultValue={1}
             inputProps={{ min: 1 }}
             value={quantity}
             onChange={handleQuantityChange}

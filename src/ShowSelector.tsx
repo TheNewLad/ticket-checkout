@@ -5,10 +5,10 @@ import { shows } from "./shows";
 
 interface Props {
   selectedShow: number;
-  setSelectedShow: (id: number) => void;
+  onShowSelect: (id: number) => void;
 }
 
-export const ShowSelector = ({ selectedShow, setSelectedShow }: Props) => {
+export const ShowSelector = ({ selectedShow, onShowSelect }: Props) => {
   return (
     <Box
       sx={{
@@ -22,7 +22,7 @@ export const ShowSelector = ({ selectedShow, setSelectedShow }: Props) => {
       {shows.map((show) => (
         <Show
           selected={selectedShow === show.id}
-          handleSelect={setSelectedShow}
+          handleSelect={onShowSelect}
           key={show.id}
           {...show}
         />

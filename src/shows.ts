@@ -32,7 +32,13 @@ const shows: Show[] = [
   },
 ];
 
-const findAShow = (id: number) => shows.find((show) => show.id === id);
+const findAShow = (id: number) => {
+  const show = shows.find((show) => show.id === id);
+  if (!show) {
+    throw new Error(`No show found with ID ${id}`);
+  }
+  return show;
+};
 
 export { shows, findAShow };
 export type { Show as ShowType };
