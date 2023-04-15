@@ -34,7 +34,7 @@ export default function App() {
         return (
           <ShowSelector
             selectedShow={selectedShowId}
-            setSelectedShow={setSelectedShowId}
+            onShowSelect={setSelectedShowId}
           />
         );
       case 1:
