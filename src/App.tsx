@@ -5,24 +5,45 @@ import Box from "@mui/material/Box";
 import { Stepper, Step, StepLabel, Button } from "@mui/material";
 import { ShowSelector } from "./ShowSelector";
 import { ShowType } from "./shows";
+import { TicketQuantitySelector } from "./TicketQuantitySelector";
 
 export default function App() {
   const [activeStep, setActiveStep] = useState(0);
-  const [selectedShow, setSelectedShow] = useState<ShowType["id"]>(-1);
+  const [selectedShowId, setSelectedShowId] = useState<ShowType["id"]>(-1);
+  const [errorStep, setErrorStep] = useState(-1);
 
-  const steps = ["Select A Show", "Purchase Tickets", "Checkout", "Enjoy"];
+  const handleStepError = (step: number) => {
+    setErrorStep(step);
+  };
+
+  const handleStepErrorResolved = () => {
+    setErrorStep(-1);
+  };
+
+  const steps = [
+    "Select A Show",
+    "Select Ticket Quantity",
+    "Checkout",
+    "Enjoy",
+  ];
 
   const getStepContent = (step: number) => {
     switch (step) {
       case 0:
         return (
           <ShowSelector
-            selectedShow={selectedShow}
-            setSelectedShow={setSelectedShow}
+            selectedShow={selectedShowId}
+            setSelectedShow={setSelectedShowId}
           />
         );
       case 1:
-        return "Purchase tickets";
+        return (
+          <TicketQuantitySelector
+            showId={selectedShowId}
+            onStepError={handleStepError}
+            onStepErrorResolved={handleStepErrorResolved}
+          />
+        );
 
       case 2:
         return "Checkout";
@@ -32,6 +53,11 @@ export default function App() {
         throw new Error("Unknown step");
     }
   };
+
+  const isNextDisabled = () =>
+    activeStep === steps.length - 1 ||
+    selectedShowId === -1 ||
+    errorStep === activeStep;
 
   return (
     <Container maxWidth="lg">
@@ -81,7 +107,7 @@ export default function App() {
           <Button
             variant="contained"
             onClick={() => setActiveStep((prev) => prev + 1)}
-            disabled={activeStep === steps.length - 1 || selectedShow === -1}
+            disabled={isNextDisabled()}
           >
             {activeStep === steps.length - 1 ? "Finish" : "Next"}
           </Button>

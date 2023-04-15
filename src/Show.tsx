@@ -7,20 +7,15 @@ import {
 } from "@mui/material";
 import React from "react";
 import { ShowType } from "./shows";
+import { formatCurrency, getPictureUrl } from "./util";
 
 interface Props extends ShowType {
   selected: boolean;
   handleSelect: (id: ShowType["id"]) => void;
 }
 
-const currencyFormatter = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
-
 export const Show = ({
   id,
-  pictureUrl,
   title,
   date,
   price,
@@ -32,12 +27,15 @@ export const Show = ({
     backgroundColor: selected ? "#e0e0e0" : undefined,
   };
 
+  const photoWidth = 300;
+  const photoHeight = 400;
+
   return (
     <Card sx={cardStyles}>
       <CardActionArea onClick={() => handleSelect(id)}>
         <CardMedia
-          sx={{ height: 400, width: 300 }}
-          image={pictureUrl}
+          sx={{ height: photoHeight, width: photoWidth }}
+          image={getPictureUrl(id, photoWidth, photoHeight)}
           title={title}
         />
         <CardContent>
@@ -50,7 +48,7 @@ export const Show = ({
         </CardContent>
         <CardContent>
           <Typography variant="h6" color="textPrimary" component="p">
-            {`${currencyFormatter.format(price)}`}
+            {formatCurrency(price)}
           </Typography>
         </CardContent>
       </CardActionArea>
