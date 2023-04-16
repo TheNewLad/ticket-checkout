@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
 import { Typography, TextField, Box } from "@mui/material";
+import { useFormInput } from "./hooks/useFormInput";
 
 interface Props {
   onFormError: () => void;
@@ -11,119 +12,42 @@ export const BillingAddressForm = ({
   onFormError,
   onFormErrorResolved,
 }: Props) => {
-  const [firstNameError, setFirstNameError] = useState(false);
-  const [lastNameError, setLastNameError] = useState(false);
-  const [address1Error, setAddress1Error] = useState(false);
-  const [cityError, setCityError] = useState(false);
-  const [zipError, setZipError] = useState(false);
-  const [countryError, setCountryError] = useState(false);
-  const [stateError, setStateError] = useState(false);
-
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [address1, setAddress1] = useState("");
-  const [address2, setAddress2] = useState("");
-  const [city, setCity] = useState("");
-  const [zip, setZip] = useState("");
-  const [country, setCountry] = useState("");
-  const [state, setState] = useState("");
-
-  useEffect(() => {
-    checkFormErrors();
-
-    return () => {
-      onFormErrorResolved();
-    };
-  }, []);
+  const fiveDigitZipRegex = /^\d{5}$/;
+  const [firstName, setFirstName, firstNameError] = useFormInput(true);
+  const [lastName, setLastName, lastNameError] = useFormInput(true);
+  const [address1, setAddress1, address1Error] = useFormInput(true);
+  const [address2, setAddress2] = useFormInput();
+  const [city, setCity, cityError] = useFormInput(true);
+  const [zip, setZip, zipError] = useFormInput(true, "", fiveDigitZipRegex);
+  const [country, setCountry, countryError] = useFormInput(true);
+  const [state, setState, stateError] = useFormInput(true);
 
   useEffect(() => {
     checkFormErrors();
   }, [firstName, lastName, address1, city, zip, country, state]);
 
-  const hasErrors =
-    firstNameError ||
-    lastNameError ||
-    address1Error ||
-    cityError ||
-    zipError ||
-    countryError ||
-    stateError;
-
-  const hasEmptyRequiredFields = () => {
-    const isEmpty = (value: string) => value === "";
-    return (
-      isEmpty(firstName) ||
-      isEmpty(lastName) ||
-      isEmpty(address1) ||
-      isEmpty(city) ||
-      isEmpty(zip) ||
-      isEmpty(country) ||
-      isEmpty(state)
-    );
-  };
-
   const checkFormErrors = () => {
-    if (hasEmptyRequiredFields() || hasErrors) {
+    const hasErrorFields =
+      firstNameError ||
+      lastNameError ||
+      address1Error ||
+      cityError ||
+      zipError ||
+      countryError ||
+      stateError;
+    const hasMissingFields =
+      !firstName ||
+      !lastName ||
+      !address1 ||
+      !city ||
+      !zip ||
+      !country ||
+      !state;
+    if (hasErrorFields || hasMissingFields) {
       onFormError();
     } else {
       onFormErrorResolved();
     }
-  };
-
-  const handleFirstNameChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = event.target.value;
-    const isEmpty = value === "";
-    setFirstNameError(isEmpty);
-    setFirstName(value);
-  };
-
-  const handleLastNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const isEmpty = value === "";
-    setLastNameError(isEmpty);
-    setLastName(value);
-  };
-
-  const handleAddress1Change = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const isEmpty = value === "";
-    setAddress1Error(isEmpty);
-    setAddress1(value);
-  };
-
-  const handleCityChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const isEmpty = value === "";
-    setCityError(isEmpty);
-    setCity(value);
-  };
-
-  const handleAddress2Change = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    setAddress2(value);
-  };
-
-  const handleStateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const isEmpty = value === "";
-    setStateError(isEmpty);
-    setState(value);
-  };
-
-  const handleZipChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const isNotFiveDigits = !/^\d{5}$/.test(value);
-    setZipError(isNotFiveDigits || value === "");
-    setZip(value);
-  };
-
-  const handleCountryChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const isEmpty = value === "";
-    setCountryError(isEmpty);
-    setCountry(value);
   };
 
   return (
@@ -142,7 +66,7 @@ export const BillingAddressForm = ({
             autoComplete="given-name"
             variant="standard"
             error={firstNameError}
-            onChange={handleFirstNameChange}
+            onChange={(event) => setFirstName(event.target.value)}
             value={firstName}
           />
         </Grid>
@@ -156,7 +80,7 @@ export const BillingAddressForm = ({
             autoComplete="family-name"
             variant="standard"
             error={lastNameError}
-            onChange={handleLastNameChange}
+            onChange={(event) => setLastName(event.target.value)}
             value={lastName}
           />
         </Grid>
@@ -170,7 +94,7 @@ export const BillingAddressForm = ({
             autoComplete="shipping address-line1"
             variant="standard"
             error={address1Error}
-            onChange={handleAddress1Change}
+            onChange={(event) => setAddress1(event.target.value)}
             value={address1}
           />
         </Grid>
@@ -182,7 +106,7 @@ export const BillingAddressForm = ({
             fullWidth
             autoComplete="shipping address-line2"
             variant="standard"
-            onChange={handleAddress2Change}
+            onChange={(event) => setAddress2(event.target.value)}
             value={address2}
           />
         </Grid>
@@ -196,7 +120,7 @@ export const BillingAddressForm = ({
             autoComplete="shipping address-level2"
             variant="standard"
             error={cityError}
-            onChange={handleCityChange}
+            onChange={(event) => setCity(event.target.value)}
             value={city}
           />
         </Grid>
@@ -209,7 +133,7 @@ export const BillingAddressForm = ({
             fullWidth
             variant="standard"
             error={stateError}
-            onChange={handleStateChange}
+            onChange={(event) => setState(event.target.value)}
             value={state}
           />
         </Grid>
@@ -223,7 +147,7 @@ export const BillingAddressForm = ({
             autoComplete="shipping postal-code"
             variant="standard"
             error={zipError}
-            onChange={handleZipChange}
+            onChange={(event) => setZip(event.target.value)}
             value={zip}
             helperText={zipError ? "Zip code must be 5 digits" : ""}
           />
@@ -238,7 +162,7 @@ export const BillingAddressForm = ({
             autoComplete="shipping country"
             variant="standard"
             error={countryError}
-            onChange={handleCountryChange}
+            onChange={(event) => setCountry(event.target.value)}
             value={country}
           />
         </Grid>

@@ -7,6 +7,7 @@ import {
   Box,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import { useFormInput } from "./hooks/useFormInput";
 
 interface Props {
   onFormError: () => void;
@@ -14,78 +15,68 @@ interface Props {
 }
 
 export const PaymentForm = ({ onFormError, onFormErrorResolved }: Props) => {
-  const [cardNameError, setCardNameError] = useState(false);
-  const [cardNumberError, setCardNumberError] = useState(false);
-  const [expDateError, setExpDateError] = useState(false);
-  const [cvvError, setCvvError] = useState(false);
-
-  const [cardName, setCardName] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [expDate, setExpDate] = useState("");
-  const [cvv, setCvv] = useState("");
-
-  useEffect(() => {
-    checkFormErrors();
-
-    return () => {
-      onFormErrorResolved();
-    };
-  }, []);
+  const sixteenDigitRegex = /^\d{16}$/;
+  const threeDigitRegex = /^\d{3}$/;
+  const [cardName, setCardName, cardNameError] = useFormInput(true);
+  const [cardNumber, setCardNumber, cardNumberError] = useFormInput(
+    true,
+    "",
+    sixteenDigitRegex
+  );
+  const [expDate, setExpDate, expDateError] = useFormInput(true);
+  const [cvv, setCvv, cvvError] = useFormInput(true, "", threeDigitRegex);
 
   useEffect(() => {
     checkFormErrors();
   }, [cardName, cardNumber, expDate, cvv]);
 
   const checkFormErrors = () => {
-    if (hasEmptyRequiredFields() || hasErrors) {
+    const hasErrorFields =
+      cardNameError || cardNumberError || expDateError || cvvError;
+    const hasMissingFields = !cardName || !cardNumber || !expDate || !cvv;
+    if (hasErrorFields || hasMissingFields) {
       onFormError();
     } else {
       onFormErrorResolved();
     }
   };
 
-  const hasErrors =
-    cardNameError || cardNumberError || expDateError || cvvError;
-
-  const hasEmptyRequiredFields = () => {
-    const isEmpty = (value: string) => value === "";
-    return (
-      isEmpty(cardName) ||
-      isEmpty(cardNumber) ||
-      isEmpty(expDate) ||
-      isEmpty(cvv)
-    );
-  };
-
-  const handleCardNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const isEmpty = value === "";
-    setCardNameError(isEmpty);
-    setCardName(value);
-  };
-
-  const handleCardNumberChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = event.target.value;
-    const isNotSixteenDigits = !/^\d{16}$/.test(value);
-    setCardNumberError(isNotSixteenDigits || value === "");
-    setCardNumber(value);
-  };
-
-  const handleExpDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const isEmpty = value === "";
-    setExpDateError(isEmpty);
-    setExpDate(value);
-  };
-
-  const handleCvvChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const isNotThreeDigits = !/^\d{3}$/.test(value);
-    setCvvError(isNotThreeDigits || value === "");
-    setCvv(value);
-  };
+  const fields = [
+    {
+      id: "cardName",
+      label: "Name on card",
+      autoComplete: "cc-name",
+      error: cardNameError,
+      onChange: setCardName,
+      value: cardName,
+    },
+    {
+      id: "cardNumber",
+      label: "Card number",
+      autoComplete: "cc-number",
+      error: cardNumberError,
+      onChange: setCardNumber,
+      value: cardNumber,
+      helperText: cardNumberError ? "Card Number is 16 digits" : "",
+    },
+    {
+      id: "expDate",
+      label: "Expiry date",
+      autoComplete: "cc-exp",
+      error: expDateError,
+      onChange: setExpDate,
+      value: expDate,
+    },
+    {
+      id: "cvv",
+      label: "CVV",
+      autoComplete: "cc-csc",
+      helperText: "Last three digits on signature strip",
+      error: cvvError,
+      onChange: setCvv,
+      value: cvv,
+    },
+  ];
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -93,60 +84,24 @@ export const PaymentForm = ({ onFormError, onFormErrorResolved }: Props) => {
         Payment method
       </Typography>
       <Grid container spacing={3}>
-        <Grid xs={12} md={6}>
-          <TextField
-            required
-            id="cardName"
-            label="Name on card"
-            fullWidth
-            autoComplete="cc-name"
-            variant="standard"
-            error={cardNameError}
-            onChange={handleCardNameChange}
-            value={cardName}
-          />
-        </Grid>
-        <Grid xs={12} md={6}>
-          <TextField
-            required
-            id="cardNumber"
-            label="Card number"
-            fullWidth
-            autoComplete="cc-number"
-            variant="standard"
-            error={cardNumberError}
-            onChange={handleCardNumberChange}
-            value={cardNumber}
-            helperText={cardNumberError ? "Card Number is 16 digits" : ""}
-          />
-        </Grid>
-        <Grid xs={12} md={6}>
-          <TextField
-            required
-            id="expDate"
-            label="Expiry date"
-            fullWidth
-            autoComplete="cc-exp"
-            variant="standard"
-            error={expDateError}
-            onChange={handleExpDateChange}
-            value={expDate}
-          />
-        </Grid>
-        <Grid xs={12} md={6}>
-          <TextField
-            required
-            id="cvv"
-            label="CVV"
-            helperText="Last three digits on signature strip"
-            fullWidth
-            autoComplete="cc-csc"
-            variant="standard"
-            error={cvvError}
-            onChange={handleCvvChange}
-            value={cvv}
-          />
-        </Grid>
+        {fields.map(
+          ({ id, label, error, onChange, value, helperText, autoComplete }) => (
+            <Grid xs={12} md={6}>
+              <TextField
+                required
+                fullWidth
+                variant="standard"
+                id={id}
+                label={label}
+                error={error}
+                autoComplete={autoComplete}
+                onChange={(event) => onChange(event.target.value)}
+                value={value}
+                helperText={helperText}
+              />
+            </Grid>
+          )
+        )}
       </Grid>
     </Box>
   );
