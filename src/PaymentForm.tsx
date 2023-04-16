@@ -7,6 +7,7 @@ import {
   Box,
 } from "@mui/material";
 import Grid from "@mui/material/Unstable_Grid2/Grid2";
+import { useFormInput } from "./hooks/useFormInput";
 
 interface Props {
   onFormError: () => void;
@@ -14,77 +15,27 @@ interface Props {
 }
 
 export const PaymentForm = ({ onFormError, onFormErrorResolved }: Props) => {
-  const [cardNameError, setCardNameError] = useState(false);
-  const [cardNumberError, setCardNumberError] = useState(false);
-  const [expDateError, setExpDateError] = useState(false);
-  const [cvvError, setCvvError] = useState(false);
-
-  const [cardName, setCardName] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [expDate, setExpDate] = useState("");
-  const [cvv, setCvv] = useState("");
-
-  useEffect(() => {
-    checkFormErrors();
-
-    return () => {
-      onFormErrorResolved();
-    };
-  }, []);
+  const sixteenDigitRegex = /^\d{16}$/;
+  const threeDigitRegex = /^\d{3}$/;
+  const [cardName, setCardName, cardNameError] = useFormInput(true);
+  const [cardNumber, setCardNumber, cardNumberError] = useFormInput(
+    true,
+    "",
+    sixteenDigitRegex
+  );
+  const [expDate, setExpDate, expDateError] = useFormInput(true);
+  const [cvv, setCvv, cvvError] = useFormInput(true, "", threeDigitRegex);
 
   useEffect(() => {
     checkFormErrors();
   }, [cardName, cardNumber, expDate, cvv]);
 
   const checkFormErrors = () => {
-    if (hasEmptyRequiredFields() || hasErrors) {
+    if (cardNameError || cardNumberError || expDateError || cvvError) {
       onFormError();
     } else {
       onFormErrorResolved();
     }
-  };
-
-  const hasErrors =
-    cardNameError || cardNumberError || expDateError || cvvError;
-
-  const hasEmptyRequiredFields = () => {
-    const isEmpty = (value: string) => value === "";
-    return (
-      isEmpty(cardName) ||
-      isEmpty(cardNumber) ||
-      isEmpty(expDate) ||
-      isEmpty(cvv)
-    );
-  };
-
-  const handleCardNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const isEmpty = value === "";
-    setCardNameError(isEmpty);
-    setCardName(value);
-  };
-
-  const handleCardNumberChange = (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const value = event.target.value;
-    const isNotSixteenDigits = !/^\d{16}$/.test(value);
-    setCardNumberError(isNotSixteenDigits || value === "");
-    setCardNumber(value);
-  };
-
-  const handleExpDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const isEmpty = value === "";
-    setExpDateError(isEmpty);
-    setExpDate(value);
-  };
-
-  const handleCvvChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const value = event.target.value;
-    const isNotThreeDigits = !/^\d{3}$/.test(value);
-    setCvvError(isNotThreeDigits || value === "");
-    setCvv(value);
   };
 
   return (
@@ -102,7 +53,7 @@ export const PaymentForm = ({ onFormError, onFormErrorResolved }: Props) => {
             autoComplete="cc-name"
             variant="standard"
             error={cardNameError}
-            onChange={handleCardNameChange}
+            onChange={(event) => setCardName(event.target.value)}
             value={cardName}
           />
         </Grid>
@@ -115,7 +66,7 @@ export const PaymentForm = ({ onFormError, onFormErrorResolved }: Props) => {
             autoComplete="cc-number"
             variant="standard"
             error={cardNumberError}
-            onChange={handleCardNumberChange}
+            onChange={(event) => setCardNumber(event.target.value)}
             value={cardNumber}
             helperText={cardNumberError ? "Card Number is 16 digits" : ""}
           />
@@ -129,7 +80,7 @@ export const PaymentForm = ({ onFormError, onFormErrorResolved }: Props) => {
             autoComplete="cc-exp"
             variant="standard"
             error={expDateError}
-            onChange={handleExpDateChange}
+            onChange={(event) => setExpDate(event.target.value)}
             value={expDate}
           />
         </Grid>
@@ -143,7 +94,7 @@ export const PaymentForm = ({ onFormError, onFormErrorResolved }: Props) => {
             autoComplete="cc-csc"
             variant="standard"
             error={cvvError}
-            onChange={handleCvvChange}
+            onChange={(event) => setCvv(event.target.value)}
             value={cvv}
           />
         </Grid>
