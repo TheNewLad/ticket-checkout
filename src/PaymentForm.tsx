@@ -31,7 +31,10 @@ export const PaymentForm = ({ onFormError, onFormErrorResolved }: Props) => {
   }, [cardName, cardNumber, expDate, cvv]);
 
   const checkFormErrors = () => {
-    if (cardNameError || cardNumberError || expDateError || cvvError) {
+    const hasErrorFields =
+      cardNameError || cardNumberError || expDateError || cvvError;
+    const hasMissingFields = !cardName || !cardNumber || !expDate || !cvv;
+    if (hasErrorFields || hasMissingFields) {
       onFormError();
     } else {
       onFormErrorResolved();

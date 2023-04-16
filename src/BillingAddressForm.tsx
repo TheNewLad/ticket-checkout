@@ -27,15 +27,23 @@ export const BillingAddressForm = ({
   }, [firstName, lastName, address1, city, zip, country, state]);
 
   const checkFormErrors = () => {
-    if (
+    const hasErrorFields =
       firstNameError ||
       lastNameError ||
       address1Error ||
       cityError ||
       zipError ||
       countryError ||
-      stateError
-    ) {
+      stateError;
+    const hasMissingFields =
+      !firstName ||
+      !lastName ||
+      !address1 ||
+      !city ||
+      !zip ||
+      !country ||
+      !state;
+    if (hasErrorFields || hasMissingFields) {
       onFormError();
     } else {
       onFormErrorResolved();
