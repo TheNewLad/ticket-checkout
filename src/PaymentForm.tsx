@@ -38,66 +38,67 @@ export const PaymentForm = ({ onFormError, onFormErrorResolved }: Props) => {
     }
   };
 
+  const fields = [
+    {
+      id: "cardName",
+      label: "Name on card",
+      autoComplete: "cc-name",
+      error: cardNameError,
+      onChange: setCardName,
+      value: cardName,
+    },
+    {
+      id: "cardNumber",
+      label: "Card number",
+      autoComplete: "cc-number",
+      error: cardNumberError,
+      onChange: setCardNumber,
+      value: cardNumber,
+      helperText: cardNumberError ? "Card Number is 16 digits" : "",
+    },
+    {
+      id: "expDate",
+      label: "Expiry date",
+      autoComplete: "cc-exp",
+      error: expDateError,
+      onChange: setExpDate,
+      value: expDate,
+    },
+    {
+      id: "cvv",
+      label: "CVV",
+      autoComplete: "cc-csc",
+      helperText: "Last three digits on signature strip",
+      error: cvvError,
+      onChange: setCvv,
+      value: cvv,
+    },
+  ];
+
   return (
     <Box sx={{ flexGrow: 1 }}>
       <Typography variant="h5" gutterBottom>
         Payment method
       </Typography>
       <Grid container spacing={3}>
-        <Grid xs={12} md={6}>
-          <TextField
-            required
-            id="cardName"
-            label="Name on card"
-            fullWidth
-            autoComplete="cc-name"
-            variant="standard"
-            error={cardNameError}
-            onChange={(event) => setCardName(event.target.value)}
-            value={cardName}
-          />
-        </Grid>
-        <Grid xs={12} md={6}>
-          <TextField
-            required
-            id="cardNumber"
-            label="Card number"
-            fullWidth
-            autoComplete="cc-number"
-            variant="standard"
-            error={cardNumberError}
-            onChange={(event) => setCardNumber(event.target.value)}
-            value={cardNumber}
-            helperText={cardNumberError ? "Card Number is 16 digits" : ""}
-          />
-        </Grid>
-        <Grid xs={12} md={6}>
-          <TextField
-            required
-            id="expDate"
-            label="Expiry date"
-            fullWidth
-            autoComplete="cc-exp"
-            variant="standard"
-            error={expDateError}
-            onChange={(event) => setExpDate(event.target.value)}
-            value={expDate}
-          />
-        </Grid>
-        <Grid xs={12} md={6}>
-          <TextField
-            required
-            id="cvv"
-            label="CVV"
-            helperText="Last three digits on signature strip"
-            fullWidth
-            autoComplete="cc-csc"
-            variant="standard"
-            error={cvvError}
-            onChange={(event) => setCvv(event.target.value)}
-            value={cvv}
-          />
-        </Grid>
+        {fields.map(
+          ({ id, label, error, onChange, value, helperText, autoComplete }) => (
+            <Grid xs={12} md={6}>
+              <TextField
+                required
+                fullWidth
+                variant="standard"
+                id={id}
+                label={label}
+                error={error}
+                autoComplete={autoComplete}
+                onChange={(event) => onChange(event.target.value)}
+                value={value}
+                helperText={helperText}
+              />
+            </Grid>
+          )
+        )}
       </Grid>
     </Box>
   );
