@@ -51,7 +51,11 @@ const Show = ({
         alt={title}
         className={"rounded-t-md"}
       />
-      <div className={"flex flex-col items-center rounded-b-md border py-4"}>
+      <div
+        className={`flex flex-col items-center rounded-b-md border py-4 ${
+          selected ? "bg-blue-500 text-white" : ""
+        }`}
+      >
         <h2 className={"text-2xl"}>{title}</h2>
         <p>{date}</p>
         <p className={"font-bold"}>{formatCurrency(price)}</p>
