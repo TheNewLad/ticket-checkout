@@ -41,7 +41,7 @@ const Show = ({
   const photoHeight = isMediumScreen ? 400 : 300;
   return (
     <div
-      className={"my-6 drop-shadow-sm hover:cursor-pointer"}
+      className={"my-6 rounded-md border shadow-md hover:cursor-pointer"}
       onClick={handleSelect}
     >
       <Image
@@ -52,7 +52,7 @@ const Show = ({
         className={"rounded-t-md"}
       />
       <div
-        className={`flex flex-col items-center rounded-b-md border py-4 ${
+        className={`flex flex-col items-center rounded-b-md py-4 ${
           selected ? "bg-blue-500 text-white" : ""
         }`}
       >
