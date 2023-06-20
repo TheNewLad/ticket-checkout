@@ -4,6 +4,7 @@ import { useState } from "react";
 import { formatCurrency, getPictureUrl } from "@/utils";
 import Image from "next/image";
 import { useMediaQuery } from "@/utils/hooks/useMediaQuery";
+import Link from "next/link";
 
 export default function ShowSelector() {
   const [selectedShow, setSelectedShow] = useState<number | null>(null);
@@ -20,6 +21,20 @@ export default function ShowSelector() {
           handleSelect={() => setSelectedShow(id)}
         />
       ))}
+      <div className={"my-10 flex flex-col items-center"}>
+        <Link href={`/purchase-tickets/show/${selectedShow}`}>
+          <button
+            disabled={!selectedShow}
+            className={`rounded-md px-4 py-1.5 uppercase ${
+              !!selectedShow
+                ? "bg-blue-500 text-white shadow-md transition duration-200"
+                : "cursor-not-allowed bg-transparent opacity-20"
+            }`}
+          >
+            Next
+          </button>
+        </Link>
+      </div>
     </div>
   );
 }
