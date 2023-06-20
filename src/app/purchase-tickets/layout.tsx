@@ -10,6 +10,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <Step step={3} active={false} text={"Checkout"} />
       </div>
       {children}
+      <p className={"mt-10 py-6"}>
+        This demo is built with Next.js and TailwindCSS
+      </p>
     </div>
   );
 }
