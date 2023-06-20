@@ -5,6 +5,7 @@ import { formatCurrency, getPictureUrl } from "@/utils";
 import Image from "next/image";
 import { useMediaQuery } from "@/utils/hooks/useMediaQuery";
 import Link from "next/link";
+import Button from "@/components/Button";
 
 export default function ShowSelector() {
   const [selectedShow, setSelectedShow] = useState<number | null>(null);
@@ -23,16 +24,16 @@ export default function ShowSelector() {
       ))}
       <div className={"my-10 flex flex-col items-center"}>
         <Link href={`/purchase-tickets/show/${selectedShow}`}>
-          <button
+          <Button
             disabled={!selectedShow}
-            className={`rounded-md px-4 py-1.5 uppercase ${
+            className={`${
               !!selectedShow
                 ? "bg-blue-500 text-white shadow-md transition duration-200"
                 : "cursor-not-allowed bg-transparent opacity-20"
             }`}
           >
             Next
-          </button>
+          </Button>
         </Link>
       </div>
     </div>
